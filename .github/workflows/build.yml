@@ -35,22 +35,24 @@ jobs:
           node-version: 20
       - name: Install frontend deps
         run: npm install
-      - name: Build portable exe
-        run: npm run tauri build -- --bundles none
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+      - name: Build app
+        run: npm run tauri build -- --bundles nsis
+      - name: Upload portable exe to release
+        uses: softprops/action-gh-release@v1
         with:
           name: "Shinobi Forge ${{ github.ref_name }}"
           body: |
             ## Shinobi Forge ${{ github.ref_name }}
 
-            **Portable app — no installation needed.**
+            **Portable — no installation needed.**
 
             1. Download `shinobi-forge.exe`
-            2. Put it anywhere (Desktop, a folder, wherever)
+            2. Put it anywhere (Desktop, Documents, wherever)
             3. Double-click to run
-            4. A `data/` folder will be created next to the exe for settings and save backups
+            4. A `data/` folder is created next to the exe for settings and save backups
 
-            > Windows may show a SmartScreen warning — click "More info" → "Run anyway"
+            **Requirements:** Windows 10/11 with WebView2 (pre-installed on modern Windows via Edge)
+
+            > SmartScreen warning? Click "More info" → "Run anyway" (app is unsigned)
           draft: false
           files: src-tauri/target/release/shinobi-forge.exe
