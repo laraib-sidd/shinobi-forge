@@ -22,7 +22,12 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; script-src 'self'"
+    }
+  },
+  "plugins": {
+    "fs": {
+      "scope": ["$APPDATA/ShinobiForge/**", "$APPLOCAL/ShinobiForge/**"]
     }
   },
   "bundle": {
