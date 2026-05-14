@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    shinobi_forge_lib::run()
+    shinobi_forge::run()
 }
