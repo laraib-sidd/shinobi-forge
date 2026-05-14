@@ -1,51 +1,30 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { useEffect, useState } from 'react';
+import { useAppStore } from './stores/useAppStore';
+import Sidebar from './components/layout/Sidebar';
+import DashboardScreen from './components/dashboard/DashboardScreen';
+import SavesScreen from './components/saves/SavesScreen';
+import SettingsScreen from './components/settings/SettingsScreen';
+import SetupWizard from './components/wizard/SetupWizard';
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+type Screen = 'dashboard' | 'saves' | 'settings';
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+export default function App() {
+  const { status, loadAll } = useAppStore();
+  const [screen, setScreen] = useState<Screen>('dashboard');
+
+  useEffect(() => { loadAll(); }, [loadAll]);
+
+  const showWizard = status !== null && status.first_run;
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+    <div className="flex h-screen bg-zinc-950 text-zinc-100 overflow-hidden">
+      <Sidebar active={screen} onNavigate={setScreen} />
+      <main className="flex-1 overflow-y-auto p-6">
+        {screen === 'dashboard' && <DashboardScreen />}
+        {screen === 'saves' && <SavesScreen />}
+        {screen === 'settings' && <SettingsScreen />}
+      </main>
+      {showWizard && <SetupWizard />}
+    </div>
   );
 }
-
-export default App;
