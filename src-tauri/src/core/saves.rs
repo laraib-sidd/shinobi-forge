@@ -11,10 +11,7 @@ pub fn sekiro_save_dir() -> PathBuf {
 }
 
 fn backup_base_dir() -> PathBuf {
-    dirs::data_local_dir()
-        .unwrap_or_else(|| PathBuf::from("."))
-        .join("ShinobiForge")
-        .join("backups")
+    crate::core::state::app_data_dir().join("backups")
 }
 
 pub fn backup(label: Option<String>) -> Result<SaveBackup, String> {

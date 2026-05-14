@@ -3,13 +3,18 @@ use std::fs;
 use std::path::PathBuf;
 
 const CONFIG_FILE: &str = "shinobi-forge.json";
-const APP_DIR: &str = "ShinobiForge";
+const DATA_DIR: &str = "data";
+
+pub fn app_data_dir() -> PathBuf {
+    std::env::current_exe()
+        .ok()
+        .and_then(|p| p.parent().map(|d| d.to_path_buf()))
+        .unwrap_or_else(|| PathBuf::from("."))
+        .join(DATA_DIR)
+}
 
 pub fn config_path() -> PathBuf {
-    dirs::data_local_dir()
-        .unwrap_or_else(|| PathBuf::from("."))
-        .join(APP_DIR)
-        .join(CONFIG_FILE)
+    app_data_dir().join(CONFIG_FILE)
 }
 
 pub fn load() -> AppConfig {

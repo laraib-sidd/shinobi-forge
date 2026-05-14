@@ -14,7 +14,16 @@ export default function App() {
 
   useEffect(() => { loadAll(); }, [loadAll]);
 
-  const showWizard = status !== null && status.first_run;
+  const { loading } = useAppStore();
+  const showWizard = status?.first_run === true;
+
+  if (status === null && loading) {
+    return (
+      <div className="flex h-screen bg-zinc-950 text-zinc-100 items-center justify-center">
+        <p className="text-zinc-400 text-sm">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-zinc-950 text-zinc-100 overflow-hidden">
