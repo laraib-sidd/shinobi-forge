@@ -35,11 +35,8 @@ jobs:
           node-version: 20
       - name: Install frontend deps
         run: npm install
-      - name: Build frontend
-        run: npm run build
       - name: Build portable exe
-        run: cargo tauri build --bundles none
-        working-directory: .
+        run: npm run tauri build -- --bundles none
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
